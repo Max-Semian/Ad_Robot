@@ -52,7 +52,6 @@
 ## Быстрый старт (Docker)
 
 ```bash
-cd kpi-trend
 docker compose up --build
 ```
 
@@ -66,7 +65,7 @@ docker compose up --build
 **1. Бэкенд** (терминал №1):
 
 ```bash
-cd kpi-trend/backend
+cd backend
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
@@ -75,7 +74,7 @@ uvicorn app.main:app --reload --port 8000
 **2. Фронтенд** (терминал №2):
 
 ```bash
-cd kpi-trend/frontend
+cd frontend
 npm install
 cp .env.local.example .env.local   # при необходимости поменяйте адрес API
 npm run dev                        # http://localhost:3000
@@ -88,16 +87,16 @@ npm run dev                        # http://localhost:3000
 
 ```bash
 # бэкенд: 10 тестов (эндпоинты, валидация длин, детерминированный random)
-cd kpi-trend/backend && ./.venv/bin/python -m pytest -q
+cd backend && ./.venv/bin/python -m pytest -q
 
 # фронтенд: сборка + типы
-cd kpi-trend/frontend && npm run build
+cd frontend && npm run build
 
 # структура опции графика и HTML тултипа (нужен запущенный бэкенд)
-cd kpi-trend/frontend && npm run check:chart
+cd frontend && npm run check:chart
 
 # визуальная проверка в headless-браузере (нужен playwright, см. scripts/visual-check.cjs)
-cd kpi-trend/frontend && npm i -D playwright && npx playwright install chromium
+cd frontend && npm i -D playwright && npx playwright install chromium
 npm run check:visual -- http://localhost:3000   # скриншот + текст тултипа + ошибки консоли
 ```
 
