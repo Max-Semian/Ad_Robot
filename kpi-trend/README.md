@@ -49,35 +49,76 @@
 - Ореол вокруг активной точки сделан через `shadowBlur`, а не отдельным кругом.
 - Цвет баров задаётся одним цветом серии (заливка всегда белая).
 
-## Быстрый старт (Docker)
+## Установка
+
+### Требования
+
+| Способ | Что нужно |
+|---|---|
+| **Docker** (рекомендуется) | [Docker](https://docs.docker.com/get-docker/) + Docker Compose v2 |
+| **Локально** | Python **3.12+**, Node.js **20+** (npm), Git |
+
+Порты по умолчанию: **3000** (UI), **8000** (API) — должны быть свободны.
+
+Если вы клонировали весь репозиторий `Ad_Robot`, перейдите в каталог проекта:
+
+```bash
+cd kpi-trend
+```
+
+Дальше команды ниже предполагают, что текущая директория — `kpi-trend/`.
+
+### Установка и запуск через Docker
 
 ```bash
 docker compose up --build
 ```
+
+После сборки:
 
 - UI: http://localhost:3000
 - API: http://localhost:8000 (`/docs` — Swagger)
 
 Остановить: `docker compose down`.
 
-## Локальный запуск (без Docker)
+Пересобрать после правок кода: `docker compose up --build`.
 
-**1. Бэкенд** (терминал №1):
+### Локальная установка (без Docker)
+
+Нужны **два терминала**: сначала бэкенд, затем фронтенд.
+
+**Бэкенд** (терминал №1):
 
 ```bash
 cd backend
-python3 -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn app.main:app --reload --port 8000
 ```
 
-**2. Фронтенд** (терминал №2):
+Проверка: http://127.0.0.1:8000/api/health → `{"status":"ok"}`.
+
+Для тестов дополнительно:
+
+```bash
+pip install -r requirements-dev.txt
+pytest -q
+```
+
+**Фронтенд** (терминал №2):
 
 ```bash
 cd frontend
 npm install
 cp .env.local.example .env.local   # при необходимости поменяйте адрес API
 npm run dev                        # http://localhost:3000
+```
+
+В `.env.local` по умолчанию:
+
+```
+NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
 ```
 
 Если бэкенд не поднят, страница не падает: показывается карточка с командой запуска
