@@ -9,7 +9,6 @@
  *
  * Запуск:
  *   node scripts/visual-check.cjs http://localhost:3000
- *   node scripts/visual-check.cjs http://localhost:8080            # Vite-версия
  */
 
 const path = require('node:path');

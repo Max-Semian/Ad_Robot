@@ -96,7 +96,7 @@ function buildHiddenAxis(topPadding = 0.12) {
  * Рисовать ли баровую серию (4-ю последовательность).
  *
  * В референсе (GIF) и на скрине это низкие синие полоски 2–4 px у основания —
- * белая заливка + синяя обводка из Node-архива, но ось сжата через
+ * белая заливка + синяя обводка, ось сжата через
  * `BAR_MAX_HEIGHT_RATIO`, чтобы столбики не уходили на всю высоту графика.
  */
 export const BAR_SERIES_ENABLED = true;
@@ -218,8 +218,8 @@ export function buildOption(echarts: EChartsModule, data: ChartData): EChartsOpt
         },
         z: 1,
       },
-      // --- 4. bar (CPA): стиль из kpi-trend-chart.zip (белая заливка + синяя
-      // обводка), высота сжата осью buildBarAxis — аккуратные полоски у низа.
+      // --- 4. bar (CPA): белая заливка + синяя обводка; высота сжата
+      // осью buildBarAxis — аккуратные полоски у низа.
       ...(BAR_SERIES_ENABLED
         ? [
             {
