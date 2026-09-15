@@ -130,6 +130,8 @@ NEXT_PUBLIC_API_BASE_URL=http://127.0.0.1:8000
 
 ## Проверки
 
+Нужны поднятый API (`:8000`) и UI (`:3000`), кроме `pytest` и `npm run build`.
+
 ```bash
 # бэкенд: 10 тестов (эндпоинты, валидация длин, детерминированный random)
 cd kpi-trend/backend && ./.venv/bin/python -m pytest -q
@@ -140,11 +142,13 @@ cd kpi-trend/frontend && npm run build
 # структура опции графика и HTML тултипа (нужен запущенный бэкенд)
 cd kpi-trend/frontend && npm run check:chart
 
-# визуальная проверка в headless-браузере (нужен playwright, см. scripts/visual-check.cjs)
-cd kpi-trend/frontend && npm i -D playwright && npx playwright install chromium
-npm run check:visual -- http://localhost:3000   # скриншот + текст тултипа + ошибки консоли
+# Playwright: UI, тултип 4 серий, CPA-бары, hover-маркеры Cost/ROI, Randomize/Reset
+cd kpi-trend/frontend
+npx playwright install chromium   # один раз
+npm run check:playwright -- http://localhost:3000
 ```
 
+Скриншоты Playwright по умолчанию пишутся в `/tmp/kpi-playwright` (или в путь из 2-го аргумента).
 ## API
 
 | Метод | Путь | Что делает |
@@ -244,7 +248,8 @@ kpi-trend/
 │  │  └─ api.ts                  # клиент API (адрес для браузера и для SSR в Docker)
 │  ├─ scripts/
 │  │  ├─ render-check.cjs        # структура опции + HTML тултипа
-│  │  └─ visual-check.cjs        # то же, но в реальном браузере (Playwright)
+│  │  ├─ playwright-checks.cjs   # Playwright: тултип, бары, hover, Randomize/Reset
+│  │  └─ visual-check.cjs        # простой скриншот страницы (Playwright)
 │  ├─ types.ts                   # типы, зеркало backend/app/models.py
 │  └─ Dockerfile
 ├─ docker-compose.yml            # backend + frontend одной командой
