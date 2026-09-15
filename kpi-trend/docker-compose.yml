@@ -1,0 +1,35 @@
+services:
+  backend:
+    build: ./backend
+    container_name: kpi-backend
+    environment:
+      # Браузер ходит на localhost:8000 — CORS должен это разрешать.
+      CORS_ORIGINS: 'http://localhost:3000,http://127.0.0.1:3000'
+    ports:
+      - '8000:8000'
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/health').status==200 else 1)
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Вшивается в клиентский бандл: так браузер обращается к бэкенду с хоста.
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    container_name: kpi-frontend
+    environment:
+      # SSR внутри Docker ходит к бэкенду по имени сервиса, а не через localhost.
+      INTERNAL_API_BASE_URL: http://backend:8000
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8000
+    ports:
+      - '3000:3000'
+    depends_on:
+      backend:
+        condition: service_healthy
